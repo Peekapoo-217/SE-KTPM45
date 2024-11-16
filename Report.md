@@ -62,7 +62,7 @@ public enum StrategyType {
 - Dễ dàng sửa đổi strategy
 
 
-## 2.2. Làm rõ tham số chiến lược
+## 2.2. Làm rõ các tham số
 Giải pháp: Thêm các setter để cung cấp tham số bổ sung trước khi thực thi chiến lược.
 Ví dụ:
 ````
