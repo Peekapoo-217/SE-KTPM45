@@ -1,0 +1,8 @@
+com\mycompany\banktransactionversion01\analyzer\BankTransactionSummarize.class
+com\mycompany\banktransactionversion01\BankTransactionVersion01.class
+com\mycompany\banktransactionversion01\parser\BankStatementParser.class
+com\mycompany\banktransactionversion01\parser\BankStatementCSVParser.class
+com\mycompany\banktransactionversion01\model\BankTransaction.class
+com\mycompany\banktransactionversion01\analyzer\BankStatementAnalyzer.class
+BankTransactionFilter.class
+com\mycompany\banktransactionversion01\service\BankStatementProcessor.class
