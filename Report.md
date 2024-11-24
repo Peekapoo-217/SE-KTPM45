@@ -50,11 +50,6 @@
   - Mô tả (`description`)
 - `BankTransaction` chỉ có trách nhiệm duy nhất là biểu diễn dữ liệu của một giao dịch, không liên quan đến logic xử lý hay phân tích.
 
-#### **Kết quả của việc áp dụng SRP:**
-- **Dễ bảo trì:** Nếu sau này cần thay đổi cách xử lý dữ liệu CSV (ví dụ thêm định dạng JSON), chỉ cần thay đổi lớp `BankStatementCSVParser` mà không ảnh hưởng đến các phần khác.
-- **Dễ hiểu:** Mỗi lớp có một nhiệm vụ cụ thể, làm cho mã nguồn rõ ràng hơn.
-- **Tái sử dụng:** Lớp `BankStatementCSVParser` có thể được sử dụng lại trong các bối cảnh khác mà không bị ràng buộc vào logic xử lý dữ liệu.
-
 ---
 
 ### **Tóm lại:**
