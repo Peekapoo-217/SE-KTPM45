@@ -27,7 +27,7 @@
 
 ![markdown](https://www.planttext.com/api/plantuml/png/X9BFJiCm3CRlUGfh9pXCWck5fi74JY1DR73tEZE5jacnNSJsQXnu95w1TALT_sZZb3Z-Flld93zVtrDHP2sor62idk5PY0457f6JUruJR_T5d9WyY6niStGAepjqoL9HAIEd2_OnYNWUbROcEkEuTPZkzbGPwk2CVhPyMI3Bdw7Q3kKhHYTX1klTGTUAZUbE0-F94JI29telI1JKv-FhAw3Fd9oGc4Poq1_QHjKA0GbURKgcEYu5hNuHp9W2FFIumA_VA5PfN7qEBTZ1WnMzwJadfajJtre4S-is0_8wFU2QsrJBzmsUK2cCV4mAh7U0cI_2XLuusgBQ3xfibJeDkwhQ_yFSVOEcGeyTqb3HJCbjoZ_v2m00__y30000)
 
-### Giải thích cách tác giả sử dụng để giải quyết vấn đề về SRP:
+### SRP:
 
 #### **Tách từng chức năng thành các lớp riêng biệt:**
   - Đọc dữ liệu đầu vào.
@@ -59,5 +59,35 @@
 
 ### **Tóm lại:**
 Tác giả đã giải quyết vấn đề bằng cách chia nhỏ trách nhiệm vào các lớp riêng biệt, đảm bảo rằng mỗi lớp chỉ có **một lý do để thay đổi**, qua đó tuân thủ nguyên tắc **Single Responsibility Principle (SRP)**.
-
 ---
+
+
+### Cohesion
+### Vấn đề ban đầu về Cohesion:
+- Trong phiên bản đầu tiên, class `BankStatementAnalyzer` chứa nhiều trách nhiệm:
+  - Kết nối các phần của ứng dụng (parser, calculations, reporting).
+  - Thực hiện các phép tính tổng (như tổng số tiền, số tiền trong tháng, tổng theo danh mục).
+- Việc gộp các phép tính vào `BankStatementAnalyzer` làm giảm cohesion vì các phép tính không liên quan trực tiếp đến trách nhiệm chính của class là **phân tích và báo cáo dữ liệu**.
+
+### Cách giải quyết để tăng Cohesion:
+- Tác giả tách các phép tính (**calculations**) ra khỏi `BankStatementAnalyzer` và đưa chúng vào một class riêng gọi là `BankStatementProcessor`.
+- Class `BankStatementProcessor` tập trung vào một nhiệm vụ cụ thể: thực hiện các phép tính liên quan đến danh sách giao dịch (`bankTransactions`).
+
+### Class `BankStatementProcessor` có cohesion cao:
+- Tất cả các phương thức trong `BankStatementProcessor` đều tập trung xử lý danh sách giao dịch (`bankTransactions`), chẳng hạn:
+  - `calculateTotalAmount()`: Tính tổng số tiền.
+  - `calculateTotalInMonth(Month month)`: Tính tổng số tiền trong một tháng cụ thể.
+  - `calculateTotalForCategory(String category)`: Tính tổng số tiền theo danh mục.
+- Việc đưa danh sách giao dịch (`bankTransactions`) làm thuộc tính của class giúp loại bỏ việc truyền tham số dài dòng giữa các phương thức.
+
+=> Tách Class BankStatementAnalyzer thành một lớp riêng là BankStatementProcessor
+
+
+### Coupling giữa `BankStatementAnalyzer` và `BankStatementCSVParser`:
+- `BankStatementAnalyzer` gọi `BankStatementCSVParser` để phân tích file CSV và tạo danh sách giao dịch.
+- Đây là coupling hợp lý, vì nhiệm vụ phân tích dữ liệu CSV được đóng gói hoàn toàn trong `BankStatementCSVParser`.
+- Nếu cần thay đổi định dạng đầu vào (ví dụ từ CSV sang JSON), bạn chỉ cần thay thế `BankStatementCSVParser` bằng một lớp parser khác mà không ảnh hưởng đến `BankStatementAnalyzer`.
+
+
+
+
