@@ -17,11 +17,18 @@ import java.util.List;
  * @author Huynh Cong Hung
  */
 public class BankStatementCSVParser implements BankStatementParser{
+    
     private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
+    
+    private static final int EXPECTED_ATTRIBUTES_LENGTH = 3;
     @Override
     public BankTransaction parseFromCSV(String line) {
+        
         final String[] columns = line.split(",");
+        if (columns.length < EXPECTED_ATTRIBUTES_LENGTH) {
+            throw new CSVSyntaxException("Invalid CSV format: " + line); // Ném ngoại lệ nếu số cột không hợp lệ
+        }
+        
         final LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
         final double amount = Double.parseDouble(columns[1]);
         final String description = columns[2];

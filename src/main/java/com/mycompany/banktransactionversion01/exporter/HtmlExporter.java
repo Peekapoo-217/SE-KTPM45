@@ -1,0 +1,30 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.banktransactionversion01.exporter;
+
+import com.mycompany.banktransactionversion01.model.SummaryStatistics;
+
+/**
+ *
+ * @author Huynh Cong Hung
+ */
+public class HtmlExporter implements Exporter{
+    @Override
+    public String export(final SummaryStatistics summaryStatistics){
+        String result = "<!doctype html>";
+        result += "<html lang='en'>";
+        result += "<head><title>Bank Transaction Report</title></head>";
+        result += "<body>";
+        result += "<ul>";
+        result += "<li><strong>The sum is</strong>: " + summaryStatistics.getSum() + "</li>";
+        result += "<li><strong>The average is</strong>: " + summaryStatistics.getAverage() + "</li>";
+        result += "<li><strong>The max is</strong>: " + summaryStatistics.getMax() + "</li>";
+        result += "<li><strong>The min is</strong>: " + summaryStatistics.getMin() + "</li>";
+        result += "</ul>";
+        result += "</body>";
+        result += "</html>";
+        return result;
+    }
+}

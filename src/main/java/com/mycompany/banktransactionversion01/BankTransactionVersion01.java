@@ -3,12 +3,16 @@
  */
 
 package com.mycompany.banktransactionversion01;
+import com.mycompany.banktransactionversion01.exporter.Exporter;
+import com.mycompany.banktransactionversion01.exporter.HtmlExporter;
 import com.mycompany.banktransactionversion01.model.BankTransaction;
+import com.mycompany.banktransactionversion01.model.SummaryStatistics;
 import com.mycompany.banktransactionversion01.parser.BankStatementCSVParser;
 import com.mycompany.banktransactionversion01.service.BankStatementProcessor;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Month;
 import java.util.*;
 /**
  *
@@ -18,30 +22,49 @@ public class BankTransactionVersion01 {
 
     public static void main(String[] args) {
         List<String> lines = readCSVFile("transactions.csv");
-
-
         BankStatementCSVParser parser = new BankStatementCSVParser();
         List<BankTransaction> transactions = parser.parseLinesFromCSV(lines);
 
-
-        BankStatementProcessor processor = new BankStatementProcessor();
-
-
-        double netProfit = processor.calculateNetProfit(transactions);
-        System.out.println("Net Profit: " + netProfit);
+        BankStatementProcessor processor = new BankStatementProcessor(transactions);
 
 
-        long transactionCount = processor.countTransactionsInMonth(transactions, 1, 2017);
-        System.out.println("Transactions in January 2017: " + transactionCount);
+        // Require 1
+        double totalAmount = processor.calculateTotalAmount();
+        System.out.println("Total Amount: " + totalAmount);
+
+        // Tính tổng tiền trong tháng 2 (Require 2)
+        double totalInFebruary = processor.calculateTotalInMonth(Month.FEBRUARY);
+        System.out.println("Total in February: " + totalInFebruary);
 
 
-        List<BankTransaction> top10Expenses = processor.findTop10Expenses(transactions);
-        System.out.println("Top 10 Expenses: ");
-        top10Expenses.forEach(System.out::println);
-
-
-        String category = processor.findCategoryWithMostSpending(transactions);
-        System.out.println("Category with most spending: " + category);
+        //Require 3(Tính tổng tiền theo category)
+        double totalRent = processor.calculateTotalByCategory("Rent");
+        System.out.println("Total for Rent: " + totalRent); 
+        
+        
+         SummaryStatistics stats = new SummaryStatistics(100, 500,100, 250);
+         
+         Exporter exporter = new HtmlExporter();
+         
+         String htmlReport = exporter.export(stats);
+         
+         System.out.println(htmlReport);
+        
+//        double netProfit = processor.calculateNetProfit(transactions);
+//        System.out.println("Net Profit: " + netProfit);
+//
+//
+//        long transactionCount = processor.countTransactionsInMonth(transactions, 1, 2017);
+//        System.out.println("Transactions in January 2017: " + transactionCount);
+//
+//
+//        List<BankTransaction> top10Expenses = processor.findTop10Expenses(transactions);
+//        System.out.println("Top 10 Expenses: ");
+//        top10Expenses.forEach(System.out::println);
+//
+//
+//        String category = processor.findCategoryWithMostSpending(transactions);
+//        System.out.println("Category with most spending: " + category);
     }
 
 
