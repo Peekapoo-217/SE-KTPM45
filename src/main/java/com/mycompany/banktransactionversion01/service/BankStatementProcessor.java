@@ -1,9 +1,5 @@
 package com.mycompany.banktransactionversion01.service;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 import com.mycompany.banktransactionversion01.analyzer.BankStatementAnalyzer;
 import com.mycompany.banktransactionversion01.analyzer.BankTransactionSummarize;
 import com.mycompany.banktransactionversion01.filter.BankTransactionFilter;
@@ -11,10 +7,7 @@ import com.mycompany.banktransactionversion01.model.BankTransaction;
 import java.util.List;
 import java.time.Month;
 import java.util.ArrayList;
-/**
- *
- * @author Huynh Cong Hung
- */
+
 public class BankStatementProcessor {
     
     private BankTransactionSummarize bankTransactionSummarize;
@@ -32,7 +25,7 @@ public class BankStatementProcessor {
         this.bankStatementAnalyzer = new BankStatementAnalyzer();
     }
     
-    public double summarizeTransactions(BankTransactionSummarizer bankTransactionSummarizer){
+    public double summarizeTransactions(IBankTransactionSummarizer bankTransactionSummarizer){
         double result = 0 ;
         for(final BankTransaction bankTransaction : bankTransactions){
             result = bankTransactionSummarizer.summarize(result , bankTransaction);

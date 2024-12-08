@@ -1,9 +1,5 @@
 package com.mycompany.banktransactionversion01.parser;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 import com.mycompany.banktransactionversion01.model.BankTransaction;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,11 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author Huynh Cong Hung
- */
-public class BankStatementCSVParser implements BankStatementParser{
+
+public class BankStatementCSVParser implements IBankStatementParser{
     
     private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     
@@ -26,7 +19,7 @@ public class BankStatementCSVParser implements BankStatementParser{
         
         final String[] columns = line.split(",");
         if (columns.length < EXPECTED_ATTRIBUTES_LENGTH) {
-            throw new CSVSyntaxException("Invalid CSV format: " + line); // Ném ngoại lệ nếu số cột không hợp lệ
+            throw new CSVSyntaxException("Invalid CSV format: " + line);
         }
         
         final LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
