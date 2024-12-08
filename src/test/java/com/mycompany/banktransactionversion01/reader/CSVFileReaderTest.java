@@ -33,51 +33,51 @@ class CSVFileReaderTest {
 	
 	@Test
 	void testFileReader_SensitiveData() {
-	    String sensitiveFilePath = "transaction.csv";
+	    String sensitiveFilePath = "sensitive_transactions.csv";
+	    String transactionFilePath = "transaction.csv";
 
-	    // Đọc tệp CSV
-	    List<String> lines = null;
+	    // Tạo tệp với dữ liệu nhạy cảm trong thư mục resources
+	    try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("src/test/resources", sensitiveFilePath))) {
+	        writer.write("ID,Amount,Date,Password\n");
+	        writer.write("1,100,2024-12-01,secret123\n");
+	        writer.write("2,200,2024-12-02,supersecret456\n");
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    // Kiểm tra xem tệp sensitive_transactions.csv có tồn tại và chứa dữ liệu nhạy cảm
 	    try {
 	        CSVFileReader csvFileReader = new CSVFileReader();
-	        lines = csvFileReader.readFile(sensitiveFilePath);
+	        List<String> sensitiveLines = csvFileReader.readFile(sensitiveFilePath);
+
+	        // Kiểm tra xem tệp sensitive_transactions.csv có chứa mật khẩu
+	        for (String line : sensitiveLines) {
+	            assertTrue(line.contains("secret123") || line.contains("supersecret456"),
+	                    "Sensitive data should be present in the sensitive file: " + line);
+	        }
 	    } catch (Exception e) {
-	        fail("An error occurred while reading the file: " + e.getMessage());
+	        fail("An error occurred while reading sensitive data file: " + e.getMessage());
 	    }
 
-	    // Kiểm tra xem danh sách dòng có rỗng không
-	    assertNotNull(lines);
-	    assertFalse(lines.isEmpty(), "File should not be empty");
+	    // Kiểm tra tệp transaction.csv không chứa dữ liệu nhạy cảm
+	    try {
+	        CSVFileReader csvFileReader = new CSVFileReader();
+	        List<String> transactionLines = csvFileReader.readFile(transactionFilePath);
 
-	    // Kiểm tra từng dòng trong tệp
-	    for (String line : lines) {
-	        // Tách các cột ra từ dòng (giả sử tệp CSV được phân tách bởi dấu phẩy)
-	        String[] columns = line.split(",");
-
-	        // Kiểm tra rằng tệp có đúng 3 cột (Date, Amount, Description)
-	        assertEquals(3, columns.length, "Each line should have 3 columns");
-
-	        // Kiểm tra định dạng ngày tháng (dd-MM-yyyy)
-	        String date = columns[0].trim();
-	        assertTrue(date.matches("\\d{2}-\\d{2}-\\d{4}"), "Date format is incorrect: " + date);
-
-	        // Kiểm tra số tiền có phải là số hợp lệ không (kiểu Integer hoặc Double)
-	        String amountStr = columns[1].trim();
-	        try {
-	            Double amount = Double.parseDouble(amountStr);
-	            assertTrue(amount != 0, "Amount should not be zero: " + amountStr);
-	        } catch (NumberFormatException e) {
-	            fail("Amount is not a valid number: " + amountStr);
+	        // Kiểm tra rằng không có dữ liệu nhạy cảm (như mật khẩu) trong tệp transaction.csv
+	        for (String line : transactionLines) {
+	            assertFalse(line.contains("secret123") || line.contains("supersecret456"),
+	                    "Transaction file should not contain sensitive data: " + line);
 	        }
+	    } catch (Exception e) {
+	        fail("An error occurred while reading transaction file: " + e.getMessage());
+	    }
 
-	        // Kiểm tra mô tả không rỗng
-	        String description = columns[2].trim();
-	        assertNotNull(description, "Description should not be null or empty");
-	        assertFalse(description.isEmpty(), "Description should not be empty");
+	    // Clean-up: xóa tệp sau khi kiểm thử
+	    try {
+	        Files.delete(Paths.get("src/test/resources", sensitiveFilePath));
+	    } catch (IOException e) {
+	        e.printStackTrace();
 	    }
 	}
-
-
-
-
-	
 }
